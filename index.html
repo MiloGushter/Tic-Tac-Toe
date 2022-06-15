@@ -21,6 +21,44 @@
         <div class="field"></div>
         <div class="field"></div>
       </div>
+      <div class="input-info">
+        <div class="card">
+          <label for="player1">First player</label>
+          <input type="text" name="player1" id="player1" />
+          <label for="player1">Role</label>
+          <div class="card-role">
+            <input
+              type="radio"
+              name="choice-player1"
+              id="player1x"
+              checked
+              value="x"
+            />
+            <label>x</label>
+            <input type="radio" name="choice-player1" id="player1o" value="o" />
+            <label>o</label>
+          </div>
+          <button class="submit-info1 btn">Enter info</button>
+        </div>
+        <div class="card">
+          <label for="player2">Second player</label>
+          <input type="text" name="player2" id="player2" />
+          <label for="player2">Role</label>
+          <div class="card-role">
+            <input type="radio" name="choice-player2" id="player2x" value="x" />
+            <label>x</label>
+            <input
+              type="radio"
+              name="choice-player2"
+              id="player2o"
+              checked
+              value="o"
+            />
+            <label>o</label>
+          </div>
+          <button class="submit-info2 btn">Enter info</button>
+        </div>
+      </div>
     </div>
 
     <script src="scripts/script.js"></script>
