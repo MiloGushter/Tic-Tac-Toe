@@ -1,6 +1,58 @@
 const gameBoard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
-  return { board };
+  const checkBoard = (board) => {
+    for (let i = 0; i < 3; i++) {
+      if (
+        board[i] === firstPlayer.role &&
+        board[i + 3] === firstPlayer.role &&
+        board[i + 6] === firstPlayer.role
+      )
+        return `${firstPlayer.name} won playing as a "${firstPlayer.role}"`;
+      else if (
+        board[i] === secondPlayer.role &&
+        board[i + 3] === secondPlayer.role &&
+        board[i + 6] === secondPlayer.role
+      )
+        return `${secondPlayer.name} won playing as a "${secondPlayer.role}"`;
+    }
+    for (let i = 0; i < 9; i += 3) {
+      if (
+        board[i] === firstPlayer.role &&
+        board[i + 1] === firstPlayer.role &&
+        board[i + 2] === firstPlayer.role
+      )
+        return `${firstPlayer.name} won playing as a "${firstPlayer.role}"`;
+      else if (
+        board[i] === secondPlayer.role &&
+        board[i + 1] === secondPlayer.role &&
+        board[i + 2] === secondPlayer.role
+      )
+        return `${secondPlayer.name} won playing as a "${secondPlayer.role}"`;
+    }
+    for (let i = 0; i < 1; i++) {
+      if (
+        (board[i] === firstPlayer.role &&
+          board[i + 4] === firstPlayer.role &&
+          board[board.length - 1] === firstPlayer.role) ||
+        (board[i + 2] === firstPlayer.role &&
+          board[i + 4] === firstPlayer.role &&
+          board[board.length - 3] === firstPlayer.role)
+      )
+        return `${firstPlayer.name} won playing as a "${firstPlayer.role}"`;
+      else if (
+        (board[0] === secondPlayer.role &&
+          board[i + 4] === secondPlayer.role &&
+          board[board.length - 1] === secondPlayer.role) ||
+        (board[i + 2] === secondPlayer.role &&
+          board[i + 4] === secondPlayer.role &&
+          board[board.length - 3] === secondPlayer.role)
+      )
+        return `${secondPlayer.name} won playing as a "${secondPlayer.role}"`;
+    }
+    if (board.includes("") !== true) return "It's a draw!";
+    return false;
+  };
+  return { board, checkBoard };
 })();
 
 const playerCreator = function (name, role) {
@@ -80,29 +132,42 @@ const displayController = (() => {
   fields.forEach((field) => {
     field.addEventListener("click", () => {
       let fieldIndex = Array.from(fields).indexOf(field);
+      const messageBox = document.querySelector(".message");
       if (
         (field.textContent === "x" && playerO === true) ||
         (field.textContent === "o" && playerX === true)
       ) {
-        alert("That's is illegal!");
+        messageBox.style.display = "block";
+        messageBox.innerText = "That's illegal!";
+        setTimeout(function () {
+          messageBox.style.display = "none";
+        }, 2000);
       }
       // TODO: This should be turned into erase of the field
       else if (
         (field.textContent === "x" && playerX === true) ||
         (field.textContent === "o" && playerO === true)
       ) {
-        alert("You have already played here!");
+        messageBox.style.display = "block";
+        messageBox.innerText = "You have already played here!";
+        setTimeout(function () {
+          messageBox.style.display = "none";
+        }, 2000);
       }
       if (playerX === true && field.textContent === "") {
         field.textContent = "x";
         playerX = false;
         playerO = true;
-        gameBoard.board.splice(fieldIndex, 0, "x");
+        gameBoard.board[fieldIndex] = "x";
+        if (gameBoard.checkBoard(gameBoard.board) === false) return;
+        else messageBox.innerText = gameBoard.checkBoard(gameBoard.board);
       } else if (playerO === true && field.textContent === "") {
         field.textContent = "o";
         playerX = true;
         playerO = false;
-        gameBoard.board.splice(fieldIndex, 0, "o");
+        gameBoard.board[fieldIndex] = "o";
+        if (gameBoard.checkBoard(gameBoard.board) === false) return;
+        else messageBox.innerText = gameBoard.checkBoard(gameBoard.board);
       }
     });
   });
