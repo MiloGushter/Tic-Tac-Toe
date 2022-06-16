@@ -60,6 +60,19 @@ const playerCreator = function (name, role) {
 };
 
 const displayController = (() => {
+  const restartGame = function () {
+    fields.forEach((fieldalt) => {
+      fieldalt.textContent = "";
+    });
+    const reset = document.querySelector(".restart");
+    const message = document.querySelector(".message");
+    reset.classList.add("hide");
+    message.textContent = "";
+    gameBoard.board = ["", "", "", "", "", "", "", "", ""];
+  };
+
+  const createPlayer = function (radioX, radioO, input) {};
+
   // Information input controll
   let firstPlayerRadioX = document.querySelector("#player1x");
   let firstPlayerRadioO = document.querySelector("#player1o");
@@ -133,23 +146,28 @@ const displayController = (() => {
     field.addEventListener("click", () => {
       let fieldIndex = Array.from(fields).indexOf(field);
       const messageBox = document.querySelector(".message");
+      if (firstPlayer === undefined || secondPlayer === undefined) {
+        messageBox.textContent =
+          "Please enter information for both players in order to play a game";
+        return;
+      } else {
+        messageBox.textContent = "";
+      }
       if (
         (field.textContent === "x" && playerO === true) ||
         (field.textContent === "o" && playerX === true)
       ) {
         messageBox.style.display = "block";
-        messageBox.innerText = "That's illegal!";
+        messageBox.textContent = "That's illegal!";
         setTimeout(function () {
           messageBox.style.display = "none";
         }, 2000);
-      }
-      // TODO: This should be turned into erase of the field
-      else if (
+      } else if (
         (field.textContent === "x" && playerX === true) ||
         (field.textContent === "o" && playerO === true)
       ) {
         messageBox.style.display = "block";
-        messageBox.innerText = "You have already played here!";
+        messageBox.textContent = "You have already played here!";
         setTimeout(function () {
           messageBox.style.display = "none";
         }, 2000);
@@ -160,14 +178,26 @@ const displayController = (() => {
         playerO = true;
         gameBoard.board[fieldIndex] = "x";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
-        else messageBox.innerText = gameBoard.checkBoard(gameBoard.board);
+        else {
+          messageBox.textContent = gameBoard.checkBoard(gameBoard.board);
+          const resetBtn = document.querySelector(".restart");
+          resetBtn.textContent = "Restart the game";
+          resetBtn.classList.remove("hide");
+          resetBtn.addEventListener("click", restartGame);
+        }
       } else if (playerO === true && field.textContent === "") {
         field.textContent = "o";
         playerX = true;
         playerO = false;
         gameBoard.board[fieldIndex] = "o";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
-        else messageBox.innerText = gameBoard.checkBoard(gameBoard.board);
+        else {
+          messageBox.textContent = gameBoard.checkBoard(gameBoard.board);
+          const resetBtn = document.querySelector(".restart");
+          resetBtn.textContent = "Restart the game";
+          resetBtn.classList.remove("hide");
+          resetBtn.addEventListener("click", restartGame);
+        }
       }
     });
   });
