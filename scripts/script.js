@@ -1,3 +1,6 @@
+let firstPlayer;
+let secondPlayer;
+
 const gameBoard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
   const checkBoard = (board) => {
@@ -71,7 +74,36 @@ const displayController = (() => {
     gameBoard.board = ["", "", "", "", "", "", "", "", ""];
   };
 
-  const createPlayer = function (radioX, radioO, input) {};
+  const createPlayer = function (radioX, radioO, playerNum) {
+    const input = document.querySelector(`#player${playerNum}`);
+    let playerName = input.value;
+    if (playerName === "") {
+      alert("Enter the name!");
+      return;
+    }
+    if (radioO.checked !== true && radioX.checked !== true) {
+      alert("You must choose the role!");
+    }
+    input.value = "";
+    if (radioX.checked && playerNum === 1) {
+      firstPlayer = playerCreator(playerName, radioX.value);
+    } else if (radioO.checked && playerNum === 1) {
+      firstPlayer = playerCreator(playerName, radioO.value);
+    }
+    if (radioX.checked && playerNum === 2) {
+      secondPlayer = playerCreator(playerName, radioX.value);
+    } else if (radioO.checked && playerNum === 2) {
+      secondPlayer = playerCreator(playerName, radioO.value);
+    }
+  };
+
+  const gameFinish = (message) => {
+    message.textContent = gameBoard.checkBoard(gameBoard.board);
+    const resetBtn = document.querySelector(".restart");
+    resetBtn.textContent = "Restart the game";
+    resetBtn.classList.remove("hide");
+    resetBtn.addEventListener("click", restartGame);
+  };
 
   // Information input controll
   let firstPlayerRadioX = document.querySelector("#player1x");
@@ -96,45 +128,13 @@ const displayController = (() => {
   });
 
   const btn1 = document.querySelector(".submit-info1");
-  btn1.addEventListener("click", () => {
-    const input = document.querySelector("#player1");
-    let playerName = input.value;
-    if (playerName === "") {
-      alert("Enter the name!");
-      return;
-    }
-    if (
-      firstPlayerRadioO.checked !== true &&
-      firstPlayerRadioX.checked !== true
-    ) {
-      alert("You must choose the role!");
-    }
-    if (firstPlayerRadioX.checked)
-      firstPlayer = playerCreator(playerName, firstPlayerRadioX.value);
-    else if (firstPlayerRadioO.checked)
-      firstPlayer = playerCreator(playerName, firstPlayerRadioO.value);
-    input.value = "";
+  btn1.addEventListener("click", function () {
+    createPlayer(firstPlayerRadioX, firstPlayerRadioO, 1, firstPlayer);
   });
 
   const btn2 = document.querySelector(".submit-info2");
-  btn2.addEventListener("click", () => {
-    const input = document.querySelector("#player2");
-    let playerName = input.value;
-    if (playerName === "") {
-      alert("Enter the name!");
-      return;
-    }
-    if (
-      secondPlayerRadioO.checked !== true &&
-      secondPlayerRadioX.checked !== true
-    ) {
-      alert("You must choose the role!");
-    }
-    if (secondPlayerRadioX.checked)
-      secondPlayer = playerCreator(playerName, secondPlayerRadioX.value);
-    else if (secondPlayerRadioO.checked)
-      secondPlayer = playerCreator(playerName, secondPlayerRadioO.value);
-    input.value = "";
+  btn2.addEventListener("click", function () {
+    createPlayer(secondPlayerRadioX, secondPlayerRadioO, 2, secondPlayer);
   });
 
   //X is always first to be played
@@ -179,11 +179,7 @@ const displayController = (() => {
         gameBoard.board[fieldIndex] = "x";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
         else {
-          messageBox.textContent = gameBoard.checkBoard(gameBoard.board);
-          const resetBtn = document.querySelector(".restart");
-          resetBtn.textContent = "Restart the game";
-          resetBtn.classList.remove("hide");
-          resetBtn.addEventListener("click", restartGame);
+          gameFinish(messageBox);
         }
       } else if (playerO === true && field.textContent === "") {
         field.textContent = "o";
@@ -192,16 +188,9 @@ const displayController = (() => {
         gameBoard.board[fieldIndex] = "o";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
         else {
-          messageBox.textContent = gameBoard.checkBoard(gameBoard.board);
-          const resetBtn = document.querySelector(".restart");
-          resetBtn.textContent = "Restart the game";
-          resetBtn.classList.remove("hide");
-          resetBtn.addEventListener("click", restartGame);
+          gameFinish(messageBox);
         }
       }
     });
   });
 })();
-
-let firstPlayer;
-let secondPlayer;
