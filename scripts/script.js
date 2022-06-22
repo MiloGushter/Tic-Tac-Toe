@@ -98,6 +98,7 @@ const displayController = (() => {
   };
 
   const gameFinish = (message) => {
+    message.classList.remove("hide");
     message.textContent = gameBoard.checkBoard(gameBoard.board);
     const resetBtn = document.querySelector(".restart");
     resetBtn.textContent = "Restart the game";
@@ -140,6 +141,7 @@ const displayController = (() => {
   //X is always first to be played
   let playerX = true;
   let playerO = false;
+  const turnInfo = document.querySelector(".turn-info");
 
   fields = document.querySelectorAll(".field");
   fields.forEach((field) => {
@@ -157,25 +159,24 @@ const displayController = (() => {
         (field.textContent === "x" && playerO === true) ||
         (field.textContent === "o" && playerX === true)
       ) {
-        messageBox.style.display = "block";
         messageBox.textContent = "That's illegal!";
         setTimeout(function () {
-          messageBox.style.display = "none";
+          messageBox.classList.add("hide");
         }, 2000);
       } else if (
         (field.textContent === "x" && playerX === true) ||
         (field.textContent === "o" && playerO === true)
       ) {
-        messageBox.style.display = "block";
         messageBox.textContent = "You have already played here!";
         setTimeout(function () {
-          messageBox.style.display = "none";
+          messageBox.classList.add("hide");
         }, 2000);
       }
       if (playerX === true && field.textContent === "") {
         field.textContent = "x";
         playerX = false;
         playerO = true;
+        turnInfo.textContent = "O's turn";
         gameBoard.board[fieldIndex] = "x";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
         else {
@@ -185,6 +186,7 @@ const displayController = (() => {
         field.textContent = "o";
         playerX = true;
         playerO = false;
+        turnInfo.textContent = "X's turn";
         gameBoard.board[fieldIndex] = "o";
         if (gameBoard.checkBoard(gameBoard.board) === false) return;
         else {

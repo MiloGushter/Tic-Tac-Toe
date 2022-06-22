@@ -117,4 +117,10 @@ h1 {
   text-transform: uppercase;
 }
 
+.turn-info {
+  font-size: 2rem;
+  margin-bottom: 1em;
+  text-transform: uppercase;
+}
+
 /*# sourceMappingURL=style.css.map */
